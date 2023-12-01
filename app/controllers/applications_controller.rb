@@ -33,7 +33,6 @@ class ApplicationsController < ApplicationController
     #DELETE /api/v1/applications/:token
     def destroy
         @application_service.destory_application(@app)
-
         json_render(@app)
     end
 
@@ -43,7 +42,7 @@ class ApplicationsController < ApplicationController
     def set_app 
         puts params
         @application_service = ApplicationService.new
-        @app = @application_service.get_application_by_token(params)
+        @app = @application_service.get_application_by_token(params[:token])
     end
 
 
