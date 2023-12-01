@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+            MYSQL_ROOT_PASSWORD: password
+            DB_NAME: chat_system
+            DB_USERNAME: user
+            DB_PASSWORD: password
+    ports:
+      - "3306:3306"
+
+  web:
+    build: .
+    restart: on-failure
+    command: bash -c "rm -f tmp/pids/server.pid && rails s -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      MYSQL_ROOT_PASSWORD: password
+      DB_NAME: chat_system
+      DB_USERNAME: user
+      DB_PASSWORD: password
