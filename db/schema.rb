@@ -10,11 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_01_172403) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_01_191303) do
   create_table "applications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "token"
     t.string "name"
     t.integer "chat_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "chats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "chat_name"
+    t.integer "chat_number"
+    t.integer "messages_count"
+    t.integer "application_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

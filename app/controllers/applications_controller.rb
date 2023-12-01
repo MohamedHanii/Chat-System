@@ -33,7 +33,6 @@ class ApplicationsController < ApplicationController
     #DELETE /api/v1/applications/:token
     def destroy
         @application_service.destory_application(@app)
-
         json_render(@app)
     end
 
