@@ -38,8 +38,4 @@ class ApplicationService
     end
 
 
-
-
-
-
 end
