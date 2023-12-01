@@ -7,9 +7,9 @@ Rails.application.routes.draw do
   delete 'applications/:token', to: 'applications#destroy'
 
 
-  get 'applications/:token/chats', to: 'chat#index'
-  get 'applications/:token/chats/:chatNumber', to: 'chat#show'
-  post 'applications/:token/chats', to: 'chat#create'
-  put 'applications/:token/chats/:chatNumber', to: 'chat#update'
-  delete 'applications/:token/chats/:chatNumber', to: 'chat#destroy'
+  get 'applications/:token/chats', to: 'chats#index'
+  get 'applications/:token/chats/:chatNumber', to: 'chats#show'
+  post 'applications/:token/chats', to: 'chats#create'
+  put 'applications/:token/chats/:chatNumber', to: 'chats#update'
+  delete 'applications/:token/chats/:chatNumber', to: 'chats#destroy'
 end

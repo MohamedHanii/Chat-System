@@ -9,8 +9,8 @@ class ApplicationService
         return @application_repository.get_all
     end
 
-    def get_application_by_token(params)
-        return @application_repository.get_by_token(params[:token]) || 'Token not found'
+    def get_application_by_token(token)
+        return @application_repository.get_by_token(token) || 'Token not found'
     end
 
     def create_application(params)
