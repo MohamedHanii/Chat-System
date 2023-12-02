@@ -8,8 +8,15 @@ Rails.application.routes.draw do
 
 
   get 'applications/:token/chats', to: 'chats#index'
-  get 'applications/:token/chats/:chatNumber', to: 'chats#show'
+  get 'applications/:token/chats/:chat_number', to: 'chats#show'
   post 'applications/:token/chats', to: 'chats#create'
-  put 'applications/:token/chats/:chatNumber', to: 'chats#update'
-  delete 'applications/:token/chats/:chatNumber', to: 'chats#destroy'
+  put 'applications/:token/chats/:chat_number', to: 'chats#update'
+  delete 'applications/:token/chats/:chat_number', to: 'chats#destroy'
+
+
+  get 'applications/:token/chats/:chat_number/messages', to: 'message#list'
+  get 'applications/:token/chats/:chat_number/messages/:message_number', to: 'message#show'
+  post 'applications/:token/chats/:chat_number/messages', to: 'message#create'
+  put 'applications/:token/chats/:chat_number/messages/:message_number', to: 'message#update'
+  delete 'applications/:token/chats/:chat_number/messages/:message_number', to: 'message#destroy'
 end

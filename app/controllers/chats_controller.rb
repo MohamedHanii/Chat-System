@@ -11,7 +11,7 @@ class ChatsController < ApplicationController
     # List a single specific Chat inside application
     # GET api/v1/applications/:token/chats/:chatNumber
     def show 
-        chat = @chat_service.get_chat_by_number(@app,params[:chatNumber])
+        chat = @chat_service.get_chat_by_number(@app,params[:chat_number])
         json_render(chat)
     end
 
@@ -34,7 +34,7 @@ class ChatsController < ApplicationController
     # Update Chat
     # DELETE api/v1/applications/:token/chats/:chatNunber
     def destroy
-        chat = @chat_service.delete_chat(@app,params[:chatNumber])  
+        chat = @chat_service.delete_chat(@app,params[:chat_number])  
         json_render(chat)
     end
 

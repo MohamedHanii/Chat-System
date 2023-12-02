@@ -20,7 +20,7 @@ class ChatService
     end
 
     def update_chat(app,params)
-        chat = @chat_repository.get_chat_by_number(app,params[:chatNumber])
+        chat = @chat_repository.get_chat_by_number(app,params[:chat_number])
         chat.chat_name = params[:name]
         chat.save
         return chat
