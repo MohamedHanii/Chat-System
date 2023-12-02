@@ -1,0 +1,3 @@
+:update_database_count:
+  cron: '* * * * *' # Every hour
+  class: 'UpdateDatabaseCountWorker'
