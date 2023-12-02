@@ -1,4 +1,5 @@
 class MessagesController < ApplicationController
+    protect_from_forgery with: :null_session                                                                        
     before_action :initialize, :set_chat
 
     # list all Messages
@@ -19,8 +20,8 @@ class MessagesController < ApplicationController
    # Create New Message
    # POST /api/v1/applications/:token/chats/:chatNumber/messages
    def create 
-        newMessage = @message_service.create_new_message(@chat,params[:message])
-        json_render(@newMessage)
+        new_message = @message_service.create_new_message(@chat,params[:message])
+        json_render(new_message)
    end
  
    
@@ -51,7 +52,7 @@ class MessagesController < ApplicationController
         puts params
         @app = @application_service.get_application_by_token(params[:token])
         if @app
-            @chat = @chat_service.get_chat_by_number(params[:chat_number])
+            @chat = @chat_service.get_chat_by_number(@app,params[:chat_number])
         end
     end
 

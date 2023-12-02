@@ -24,10 +24,12 @@ class MessageService
         message = @message_repository.get_by_number(chat,params[:message_number])
         message.message_body = params[:message]
         message.save
+        return message
     end
 
     def destory_message(chat,message_number)
         message = @message_repository.get_by_number(chat,message_number)
         message.destroy
+        return message
     end
 end
