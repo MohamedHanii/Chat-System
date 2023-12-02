@@ -27,7 +27,6 @@ class ChatService
         chat
     end
 
-
     
     def update_chat(app,params)
         chat = @chat_repository.get_chat_by_number(app,params[:chat_number])
