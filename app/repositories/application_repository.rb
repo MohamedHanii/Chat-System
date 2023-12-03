@@ -16,7 +16,7 @@ class ApplicationRepository
     end
 
     def create_application(name,token)
-        return Application.create(name: name, token: token)
+        return Application.create(name: name, token: token,chat_count: 0)
     end
 
 end

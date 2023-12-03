@@ -14,7 +14,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_111422) do
   create_table "applications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "token"
     t.string "name"
-    t.integer "chat_count"
+    t.decimal "chat_count", precision: 10
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -22,7 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_111422) do
   create_table "chats", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "chat_name"
     t.integer "chat_number"
-    t.integer "messages_count"
+    t.decimal "message_count", precision: 10
     t.integer "application_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -30,7 +30,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_111422) do
 
   create_table "messages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "message_body"
-    t.integer "message_number"
+    t.decimal "message_number", precision: 10
     t.integer "chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
