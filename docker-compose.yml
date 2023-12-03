@@ -11,8 +11,7 @@ services:
             DB_PASSWORD: password
     ports:
       - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql 
+
 
       
   redis:
@@ -62,6 +61,3 @@ services:
       REDIS_URL: redis://redis:6379/1
 
 
-
-volumes:
-  mysql_data:  # Define the volume for MySQL data 

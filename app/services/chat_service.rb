@@ -11,7 +11,7 @@ class ChatService
 
     def get_chat_by_number(app,chat_number)
         
-        return @chat_repository.get_chat_by_number(app,chat_counts) 
+        return @chat_repository.get_chat_by_number(app,chat_number) 
     end
 
     def create_new_chat(app,name)
@@ -44,35 +44,21 @@ class ChatService
     end
 
     def incr_count(app)
-        chat_count = 1
-        $redis.watch(app.token) do
-            if $redis.get(app.token).nil?
-                $redis.multi do
-                    $redis.sadd("chat_count", app.token)
-                    $redis.set(app.token, app.chat_count)
-                end
-            end
-            chat_count = $redis.incr(app.token)
+        $redis.multi do
+          $redis.sadd("chat_count", app.token)
+          $redis.set(app.token, 0) unless $redis.get(app.token)
+          chat = $redis.incr(app.token)
+          chat
         end
-        $redis.unwatch
-        chat_count
+    end
+      
+    def decr_count(app)
+        $redis.multi do
+            $redis.sadd("chat_count", app.token)
+            $redis.set(app.token, 0) unless $redis.get(app.token)
+            chat_count = $redis.decr(app.token)
+            chat_count
+        end
     end
 
-    def decr_count(app)
-        chat_count = 0
-      
-        $redis.watch(app.token) do
-          if $redis.get(app.token).nil?
-            $redis.multi do
-              $redis.sadd("chat_count", app.token)
-              $redis.set(app.token, app.chatCount)
-            end
-          end
-      
-          chat_count = $redis.decr(app.token)
-        end
-      
-        $redis.unwatch
-        chat_count
-    end
 end

@@ -13,7 +13,7 @@ class ChatRepository
     end
 
     def create_new_chat(app,name,chat_number)
-        app.chats.build(chat_name: name, chat_number: chat_number)
+        app.chats.build(chat_name: name, chat_number: chat_number,message_count:  0)
     end
 
     def last_chat_number(app)
