@@ -34,6 +34,8 @@ gem 'redis'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"

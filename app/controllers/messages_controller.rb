@@ -38,7 +38,9 @@ class MessagesController < ApplicationController
         json_render(@chat)
     end
 
-
+    def search
+        json_render(@messages = @chat.messages.search(params[:q]))
+    end
 
    private
 
