@@ -1,0 +1,6 @@
+development: &default
+  host: 'elastic'
+test:
+  <<: *default
+production:
+  <<: *default
