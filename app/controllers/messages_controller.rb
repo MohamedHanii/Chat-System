@@ -13,8 +13,9 @@ class MessagesController < ApplicationController
   # GET /api/v1/applications/:token/chats/:chatNumber/messages/:messageNumber
     def show                   
         message = @message_service.get_message_by_number(@chat,params[:message_number])  
-        if message
-            return render json: { error: 'Message number not found' }, status: :not_found                                                              
+        if message == nil
+            return render json: { error: 'Message number not found' }, status: :not_found       
+        end                                                      
         json_render(message)                                    
     end
 
@@ -59,7 +60,7 @@ class MessagesController < ApplicationController
     end
 
     def set_chat 
-        @app = @application_service.get_application_by_token(params[:token])
+        @app = @application_service.get_application_by_token(params[:application_token])
         if @app == nil
             return render json: { error: 'Application not found' }, status: :not_found
         end

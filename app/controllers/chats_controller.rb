@@ -58,7 +58,7 @@ class ChatsController < ApplicationController
     end
 
     def set_app 
-        @app = @application_service.get_application_by_token(params[:token])
+        @app = @application_service.get_application_by_token(params[:application_token])
         if @app == nil
             return render json: { error: 'Application not found' }, status: :not_found
        end
