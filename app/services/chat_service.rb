@@ -10,7 +10,6 @@ class ChatService
     end
 
     def get_chat_by_number(app,chat_number)
-        
         return @chat_repository.get_chat_by_number(app,chat_number) 
     end
 
@@ -26,11 +25,13 @@ class ChatService
         }.to_json
         
         ObjectCreationWorker.perform_async('Chat',object_params)
-        new_chat
     end
     
     def update_chat(app,params)
         chat = @chat_repository.get_chat_by_number(app,params[:chat_number])
+        if chat == nil
+            return chat
+        end
         chat.chat_name = params[:name]
         chat.save
         return chat
@@ -38,8 +39,11 @@ class ChatService
 
 
     def delete_chat(app,chat_number)
-        chat_count = decr_count(app)
         chat = @chat_repository.get_chat_by_number(app,chat_number)
+        if chat == nil
+            return chat
+        end
+        chat_count = decr_count(app)
         chat.destroy
         return chat
     end
