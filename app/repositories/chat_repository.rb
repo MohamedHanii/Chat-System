@@ -12,11 +12,12 @@ class ChatRepository
         app.chats.find_by(chat_number: chat_number)
     end
 
-    def create_new_chat(app,name,chat_number)
-        app.chats.build(chat_name: name, chat_number: chat_number,message_count:  0)
+    def create_new_chat(app,name)
+        app.chats.build(chat_name: name,message_count:  0)
     end
 
-    def last_chat_number(app)
+    def last_chat_number(token)
+        app = Application.find_by(token: token)
         last_chat = app.chats.order(:chat_number).last
         last_chat ? last_chat.chat_number : 0
     end

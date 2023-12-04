@@ -33,6 +33,7 @@ gem "jbuilder"
 gem 'redis'
 gem 'sidekiq'
 gem 'sidekiq-cron'
+gem 'bunny'
 
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
