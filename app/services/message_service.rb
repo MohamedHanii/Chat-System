@@ -16,12 +16,12 @@ class MessageService
     def create_new_message(chat,message_body)
         new_message=nil
         incr_count(chat)
-        ActiveRecord::Base.transaction do
-            last_message_count = @message_repository.last_message_number(chat)
-            new_message = @message_repository.create_new_message(chat,message_body,last_message_count+1)
-            new_message.save
-        end
-
+        new_message = @message_repository.create_new_message(chat,message_body)
+        object_params = {
+            parent: chat.to_json,
+            object: new_message.to_json,
+        }.to_json
+        ObjectCreationWorker.perform_async('Message',object_params)
         return new_message
     end
 

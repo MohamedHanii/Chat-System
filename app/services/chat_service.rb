@@ -17,16 +17,17 @@ class ChatService
     def create_new_chat(app,name)
         chat = nil
         chat_counts = incr_count(app)
-
-        ActiveRecord::Base.transaction do
-          last_chat_number = @chat_repository.last_chat_number(app)
-          chat = @chat_repository.create_new_chat(app, name, last_chat_number + 1)
-          chat.save
-        end
-
-        chat
+        new_chat = @chat_repository.create_new_chat(app, name)
+        
+        # Prepare the object creation payload
+        object_params = {
+            'parent': app.to_json,
+            'object': new_chat.to_json,
+        }.to_json
+        
+        ObjectCreationWorker.perform_async('Chat',object_params)
+        new_chat
     end
-
     
     def update_chat(app,params)
         chat = @chat_repository.get_chat_by_number(app,params[:chat_number])

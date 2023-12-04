@@ -49,4 +49,7 @@ class ApplicationsController < ApplicationController
     def json_render(reply)
         render json: reply.as_json(:except => :id)
     end
+
+
+    
 end
