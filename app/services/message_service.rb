@@ -14,15 +14,35 @@ class MessageService
 
 
     def create_new_message(chat,message_body)
-        new_message=nil
-        incr_count(chat)
-        new_message = @message_repository.create_new_message(chat,message_body)
-        object_params = {
-            parent: chat.to_json,
-            object: new_message.to_json,
-        }.to_json
-        ObjectCreationWorker.perform_async('Message',object_params)
-        return new_message
+        key = "last_message_count#{chat.id}"
+        begin
+          $redis.multi do
+            $redis.watch(key)
+            last_message_count = $redis.get(key).to_i || @message_repository.last_message_number(chat.id)
+            # Increment chat count
+            last_message_count += 1
+      
+            # Set the updated count in the transaction
+            $redis.set(key, last_message_count)
+      
+            # Create new chat object
+            new_message = @message_repository.create_new_message(chat,message_body)
+            new_message.message_number = last_message_count
+      
+            object_params = {
+              'key': chat.to_json,
+              'object': new_message.to_json,
+            }.to_json
+
+      
+            ObjectCreationWorker.perform_async('Message', object_params)
+            incr_count(chat)
+            return last_message_count
+          end
+        rescue Redis::CommandError
+          # Another client modified the key while we were watching
+          retry
+        end
     end
 
 

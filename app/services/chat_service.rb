@@ -13,20 +13,38 @@ class ChatService
         return @chat_repository.get_chat_by_number(app,chat_number) 
     end
 
-    def create_new_chat(app,name)
-        chat = nil
-        chat_counts = incr_count(app)
-        new_chat = @chat_repository.create_new_chat(app, name)
-        
-        # Prepare the object creation payload
-        object_params = {
-            'parent': app.to_json,
-            'object': new_chat.to_json,
-        }.to_json
-        
-        ObjectCreationWorker.perform_async('Chat',object_params)
+    def create_new_chat(app, name)
+        key = "last_chat_count_#{app.token}"
+      
+        begin
+          $redis.multi do
+            $redis.watch(key)
+            last_chat_count = $redis.get(key).to_i || @chat_repository.get_last_chat_num(app.token)
+            # Increment chat count
+            last_chat_count += 1
+      
+            # Set the updated count in the transaction
+            $redis.set(key, last_chat_count)
+      
+            # Create new chat object
+            new_chat = @chat_repository.create_new_chat(app, name)
+            new_chat.chat_number = last_chat_count
+      
+            object_params = {
+              'key': app.to_json,
+              'object': new_chat.to_json,
+            }.to_json
+      
+            ObjectCreationWorker.perform_async('Chat', object_params)
+            incr_count(app)
+            return last_chat_count
+          end
+        rescue Redis::CommandError
+          # Another client modified the key while we were watching
+          retry
+        end
     end
-    
+  
     def update_chat(app,params)
         chat = @chat_repository.get_chat_by_number(app,params[:chat_number])
         if chat == nil

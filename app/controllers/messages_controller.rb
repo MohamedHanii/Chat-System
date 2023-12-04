@@ -24,7 +24,7 @@ class MessagesController < ApplicationController
    # POST /api/v1/applications/:token/chats/:chatNumber/messages
    def create 
         new_message = @message_service.create_new_message(@chat,params[:message])
-        render json: {message: "message created"}, status: :created
+        render json: {message_number: new_message}, status: :created
    end
  
    
@@ -65,7 +65,7 @@ class MessagesController < ApplicationController
             return render json: { error: 'Application not found' }, status: :not_found
         end
 
-        @chat = @chat_service.get_chat_by_number(@app,params[:chat_number])
+        @chat = @chat_service.get_chat_by_number(@app,params[:chat_chat_number])
         if @chat == nil
             return render json: { error: 'Chat number not found' }, status: :not_found
         end

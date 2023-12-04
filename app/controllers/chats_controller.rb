@@ -24,8 +24,8 @@ class ChatsController < ApplicationController
     # Create New Chat
     # POST api/v1/applications/:token/chats
     def create 
-        newChat = @chat_service.create_new_chat(@app,params[:name])
-        render json: {message: "chat created"}, status: :created
+        new_chat_number = @chat_service.create_new_chat(@app,params[:name])
+        render json: {  chat_number: new_chat_number }, status: :created
     end
 
 
