@@ -12,7 +12,9 @@ class MessagesController < ApplicationController
   # Show Specific Message
   # GET /api/v1/applications/:token/chats/:chatNumber/messages/:messageNumber
     def show                   
-        message = @message_service.get_message_by_number(@chat,params[:message_number])                                                                  
+        message = @message_service.get_message_by_number(@chat,params[:message_number])  
+        if message
+            return render json: { error: 'Message number not found' }, status: :not_found                                                              
         json_render(message)                                    
     end
 
@@ -21,7 +23,7 @@ class MessagesController < ApplicationController
    # POST /api/v1/applications/:token/chats/:chatNumber/messages
    def create 
         new_message = @message_service.create_new_message(@chat,params[:message])
-        json_render(new_message)
+        render json: {message: "message created"}, status: :created
    end
  
    
@@ -29,13 +31,19 @@ class MessagesController < ApplicationController
    # PUT /api/v1/applications/:token/chats/:chatNumber/messages/:messageNumber
    def update
         message = @message_service.update_message(@chat,params)
+        if message == nil
+            return render json: { error: 'Message number not found' }, status: :not_found  
+        end
         json_render(message)
    end
    
    #Delete Message 
     def destroy
         message = @message_service.destory_message(@chat,params[:message_number])
-        json_render(@chat)
+        if message == nil
+            return render json: { error: 'Message number not found' }, status: :not_found  
+        end
+        head :no_content
     end
 
     def search
@@ -51,10 +59,14 @@ class MessagesController < ApplicationController
     end
 
     def set_chat 
-        puts params
         @app = @application_service.get_application_by_token(params[:token])
-        if @app
-            @chat = @chat_service.get_chat_by_number(@app,params[:chat_number])
+        if @app == nil
+            return render json: { error: 'Application not found' }, status: :not_found
+        end
+
+        @chat = @chat_service.get_chat_by_number(@app,params[:chat_number])
+        if @chat == nil
+            return render json: { error: 'Chat number not found' }, status: :not_found
         end
     end
 

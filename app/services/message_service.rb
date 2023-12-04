@@ -28,14 +28,21 @@ class MessageService
 
     def update_message(chat,params)
         message = @message_repository.get_by_number(chat,params[:message_number])
+        if message == nil
+            return message
+        end
         message.message_body = params[:message]
         message.save
         return message
     end
 
     def destory_message(chat,message_number)
-        decr_count(chat)
+
         message = @message_repository.get_by_number(chat,message_number)
+        if message == nil
+            return message
+        end
+        decr_count(chat)
         message.destroy
         return message
     end
