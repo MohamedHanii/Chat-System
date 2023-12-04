@@ -48,8 +48,7 @@
               - ES_HOST=elasticsearch
           cap_add:
               - IPC_LOCK
-          volumes:
-              - elasticsearch-data:/usr/share/elasticsearch/data
+ 
 
     sidekiq:
       build: .
@@ -78,7 +77,7 @@
     web:
       build: .
       restart: on-failure
-      command: bash -c "rm -f tmp/pids/server.pid && sh startup.sh"                                  
+      command: bash -c "sh wait-for-it.sh elasticsearch:9200&&rm -f tmp/pids/server.pid && sh startup.sh"                                  
       volumes:
         - .:/app
       ports:
@@ -103,6 +102,3 @@
           - redis
           - elasticsearch
 
-  volumes:
-    elasticsearch-data:
-      driver: local 

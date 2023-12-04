@@ -10,7 +10,7 @@ class ApplicationService
     end
 
     def get_application_by_token(token)
-        return @application_repository.get_by_token(token) || 'Token not found'
+        return @application_repository.get_by_token(token) || nil
     end
 
     def create_application(params)
