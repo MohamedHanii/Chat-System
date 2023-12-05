@@ -369,7 +369,7 @@ response:
 [GET /api/v1/applications/messages/search?query=]
 
 ```
-curl -X GET  http://localhost:3001/api/v1/applications/messages/search?query=New
+curl -X GET  [http://localhost:3000/api/v1/applications/8932dd6d06bb69c0/chats/1/search?q=hello
 ```
 
 response:
@@ -387,8 +387,5 @@ response:
 ]
 ```
 
-## Future Work
 
-* Create the endpoints of chats and messages creation as a Golang app.
-* Use RabbitMQ as queuing system instead of Sidekiq.
  
