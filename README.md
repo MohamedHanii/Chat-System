@@ -80,11 +80,11 @@ As first, i started with created dockerfile and docker-compose file which have t
 * redis     --> In Memory database (Redis)
 * app       --> Ruby on Rails
 
-The API implemenetd using Rails V5 along with MYSQL as database while having Redis as in memory database for keeping track of the counts of chats and messages created.
+The API implemenetd using Rails V7 along with MYSQL as database while having Redis as in memory database for keeping track of the counts of chats and messages created.
 
-Using Sidekiq as job scheduler to run sidekiq job every 15 mints to update the chats and message counts that storge in Redis, also used Sidekiq as Queue System to avoid avoid writing directly to MySQL while serving the requests(especially for the chats and messages creation endpoints).
+Using Sidekiq as job scheduler to run sidekiq job every 1 hour to update the chats and message counts that storge in Redis, also used Sidekiq as Queue System to avoid avoid writing directly to MySQL while serving the requests(especially for the chats and messages creation endpoints).
 
-Using Elastic Search to be able to search among messages with a given keyword (Partial matching). 
+Using Elastic Search to be able to search among messages for specific chat with a given keyword (Partial matching). 
 
 
 
@@ -204,16 +204,16 @@ response:
 ```
 [
   {
-    "chatName": "first Chat",
-    "chatNumber": 1,
-    "messageCount": 0,
+    "name": "first Chat",
+    "chat_number": 1,
+    "message_count": 0,
     "created_at": "2022-06-02T09:06:18.000Z",
     "updated_at": "2022-06-02T09:06:18.000Z"
   },
   {
-    "chatName": "second Chat room",
-    "chatNumber": 2,
-    "messageCount": 0,
+    "name": "second Chat room",
+    "chat_number": 2,
+    "message_count": 0,
     "created_at": "2022-06-02T09:06:26.000Z",
     "updated_at": "2022-06-02T09:06:26.000Z"
   }
@@ -230,9 +230,9 @@ response:
 
 ```
 {
-  "chatName": "first Chat",
-  "chatNumber": 1,
-  "messageCount": 0,
+  "name": "first Chat",
+  "chat_number": 1,
+  "message_count": 0,
   "created_at": "2022-06-02T09:06:18.000Z",
   "updated_at": "2022-06-02T09:06:18.000Z"
 }
@@ -248,11 +248,7 @@ response:
 
 ```
 {
-  "chatName": "test-application",
-  "chatNumber": 3,
-  "messageCount": 0,
-  "created_at": null,
-  "updated_at": null
+  "chat_number": 3,
 }
 ```
 
@@ -266,9 +262,9 @@ response:
 
 ```
 {
-  "chatName": "updated-chat",
-  "chatNumber": 1,
-  "messageCount": 0,
+  "name": "updated-chat",
+  "chat_number": 1,
+  "message_count": 0,
   "created_at": "2022-06-02T09:06:18.000Z",
   "updated_at": "2022-06-02T09:12:38.000Z"
 }
@@ -288,20 +284,20 @@ response:
 ```
 [
     {
-        "messageContent": "first message",
-        "messageNumber": 1,
+        "message_body": "first message",
+        "message_number": 1,
         "created_at": "2022-06-01T10:25:19.000Z",
         "updated_at": "2022-06-01T10:25:19.000Z"
     },
     {
-        "messageContent": "first message",
-        "messageNumber": 2,
+        "message_body": "first message",
+        "message_number": 2,
         "created_at": "2022-06-01T10:26:16.000Z",
         "updated_at": "2022-06-01T10:26:16.000Z"
     },
     {
-        "messageContent": "first message",
-        "messageNumber": 3,
+        "message_body": "first message",
+        "message_number": 3,
         "created_at": "2022-06-01T10:47:21.000Z",
         "updated_at": "2022-06-01T10:47:21.000Z"
     }
@@ -320,8 +316,8 @@ response:
 
 ```
 {
-    "messageContent": "first message",
-    "messageNumber": 1,
+    "message_body": "first message",
+    "message_number": 1,
     "created_at": "2022-06-01T10:25:19.000Z",
     "updated_at": "2022-06-01T10:25:19.000Z"
 }
@@ -339,10 +335,7 @@ response:
 
 ```
 {
-  "messageContent": "test-message",
-  "messageNumber": 2,
-  "created_at": null,
-  "updated_at": null
+  "message_number": 2
 }
 ```
 
@@ -358,8 +351,8 @@ response:
 
 ```
 {
-  "messageContent": "updated-chat",
-  "messageNumber": 1,
+  "message_body": "updated-chat",
+  "message_number": 1,
   "created_at": "2022-06-02T09:24:13.000Z",
   "updated_at": "2022-06-02T09:27:35.000Z"
 }
@@ -377,12 +370,12 @@ response:
 ```
 [
   {
-    "messageContent": " New Message",
-    "messageNumber": 3
+    "message_body": " New Message",
+    "message_number": 3
   },
   {
-    "messageContent": " New Created Message",
-    "messageNumber": 4
+    "message_body": " New Created Message",
+    "message_number": 4
   }
 ]
 ```
