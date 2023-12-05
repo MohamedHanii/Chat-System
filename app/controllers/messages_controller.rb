@@ -44,6 +44,7 @@ class MessagesController < ApplicationController
         if message == nil
             return render json: { error: 'Message number not found' }, status: :not_found  
         end
+        
         head :no_content
     end
 

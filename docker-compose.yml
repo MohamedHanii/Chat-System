@@ -1,104 +1,96 @@
-  version: '3.8'
+version: '3.8'
 
-  services:
-    db:
-      image: mysql:8.0
-      restart: always
-      environment:
-              MYSQL_ROOT_PASSWORD: password
-              DB_NAME: chat_system
-              DB_USERNAME: user
-              DB_PASSWORD: password
-      ports:
-        - "3306:3306"
-        
-    redis:
-      image: 'redis:latest'
-      command: redis-server
-      ports:
-          - '6379:6379'
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      DB_NAME: chat_system
+      DB_USERNAME: user
+      DB_PASSWORD: password
+    ports:
+      - "3307:3306"
 
-    rabbitmq:
-      image: "rabbitmq:3-management"
-      restart: always
-      ports:
-        - "5672:5672"
-        - "15672:15672"
-      environment:
-        RABBITMQ_DEFAULT_USER: guest
-        RABBITMQ_DEFAULT_PASS: guest
-        
-    elasticsearch:
-          image: elasticsearch:8.2.0
-          restart: on-failure
-          ports:
-          - "9200:9200"
-          - "9300:9300"
-          ulimits:
-              memlock:
-                  soft: -1
-                  hard: -1
-              nofile:
-                  soft: 65536
-                  hard: 65536
-          mem_limit: 1g
-          environment:
-              - xpack.security.enabled=false
-              - discovery.type=single-node
-              - ES_HOST=elasticsearch
-          cap_add:
-              - IPC_LOCK
- 
+  redis:
+    image: 'redis:latest'
+    command: redis-server
+    ports:
+      - '6379:6379'
+      
 
-    sidekiq:
-      build: .
-      command: bundle exec sidekiq
-      volumes:
-        - .:/app
-      environment:
-        REDIS_HOST: redis
-        REDIS_PORT: 6379
-        REDIS_URL: redis://redis:6379/1
-        DB_HOST: db
-        DB_PORT: "3306" 
-        DB_USERNAME: user
-        DB_PASSWORD: password
-        DB_NAME: chat_system
-        ES_HOST: elasticsearch
-        ELASTIC_PORT: 9200
-      depends_on:
-        - redis
-        - db
-        - elasticsearch
-      links:
-          - db
-          - redis
-          - elasticsearch
-    web:
-      build: .
-      restart: on-failure
-      command: bash -c "sh wait-for-it.sh elasticsearch:9200&&rm -f tmp/pids/server.pid && sh startup.sh"                                  
-      volumes:
-        - .:/app
-      ports:
-        - "3000:3000"
-      depends_on:
-        - db
-        - redis
-        - sidekiq
-        - elasticsearch
-      environment:
-        DB_HOST: db
-        MYSQL_ROOT_PASSWORD: password
-        DB_NAME: chat_system
-        DB_USERNAME: user
-        DB_PASSWORD: password
-        REDIS_HOST: redis
-        REDIS_PORT: 6379
-        REDIS_URL: redis://redis:6379/1
-        ELASTICSEARCH_URL: http://elasticsearch:9200
-      links:
-          - db
-          - redis
-          - elasticsearch
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
 
+
+  elasticsearch:
+        image: elasticsearch:8.2.0
+        restart: on-failure
+        ports:
+        - "9200:9200"
+        - "9300:9300"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 65536
+                hard: 65536
+        mem_limit: 1g
+        environment:
+            - xpack.security.enabled=false
+            - discovery.type=single-node
+            - ES_HOST=elasticsearch
+        cap_add:
+            - IPC_LOCK
+
+
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq
+    volumes:
+      - .:/app
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379/1
+      DB_HOST: mysql
+      DB_PORT: "3306" 
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      DB_NAME: chat_system
+      ES_HOST: elasticsearch
+      ELASTIC_PORT: 9200
+    depends_on:
+      - redis
+
+  web:
+    build: .
+    restart: on-failure
+    command: bash -c "sh wait-for-it.sh elasticsearch 9200 && rm -f tmp/pids/server.pid && sh startup.sh"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+      - redis
+      - rabbitmq
+      - elasticsearch
+    environment:
+      DB_HOST: mysql
+      MYSQL_ROOT_PASSWORD: password
+      DB_NAME: chat_system
+      DB_USERNAME: user
+      DB_PASSWORD: password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379/1
+      ELASTICSEARCH_URL: http://elasticsearch:9200
