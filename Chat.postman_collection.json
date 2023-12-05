@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "7878f5f2-2aa8-42cd-bd19-082369deffb6",
+		"name": "Chat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8153475"
+	},
+	"item": [
+		{
+			"name": "Get all chats for application",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/applications/1f99c6b5d85c6a59/chats",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						"1f99c6b5d85c6a59",
+						"chats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get chat by chat number",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/applications/1f99c6b5d85c6a59/chats/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						"1f99c6b5d85c6a59",
+						"chats",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create chat",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/applications/1f99c6b5d85c6a59/chats?name=chat5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						"1f99c6b5d85c6a59",
+						"chats"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "chat5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update chat",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/applications/1f99c6b5d85c6a59/chats/1?name=update_chat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						"1f99c6b5d85c6a59",
+						"chats",
+						"1"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "update_chat"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete chat",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/applications/1f99c6b5d85c6a59/chats/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						"1f99c6b5d85c6a59",
+						"chats",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
