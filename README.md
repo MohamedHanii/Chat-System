@@ -26,7 +26,7 @@ git clone https://github.com/MohamedHanii/Chat-System.git
 Running Application
 
 ```
-cd chat_system
+cd Chat-System
 
 sudo docker-compose up --build
 ```
