@@ -48,7 +48,7 @@ class MessagesController < ApplicationController
     end
 
     def search
-        json_render(@messages = @chat.messages.search(params[:q]))
+        json_render(@messages = Message.search_messages(@chat.id,params[:q]))
     end
 
    private
@@ -64,8 +64,9 @@ class MessagesController < ApplicationController
         if @app == nil
             return render json: { error: 'Application not found' }, status: :not_found
         end
-
-        @chat = @chat_service.get_chat_by_number(@app,params[:chat_chat_number])
+    
+        chat_number = params[:chat_chat_number].present? ? params[:chat_chat_number] : params[:chat_number]
+        @chat = @chat_service.get_chat_by_number(@app,chat_number)
         if @chat == nil
             return render json: { error: 'Chat number not found' }, status: :not_found
         end

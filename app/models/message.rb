@@ -6,11 +6,22 @@ class Message < ApplicationRecord
     
     settings index: { number_of_shards: 1 } do
       mappings dynamic: 'false' do
-        indexes :message_body, type: 'text', analyzer: 'custom_analyzer'
+        indexes :chat_id, type: :integer
+        indexes :message_body, type: :text
       end
     end
-  
-    def as_indexed_json(options = {})
-      self.as_json(only: [:id, :message_body, :message_number])
+
+    def self.search_messages(chat_id, message_body)
+      __elasticsearch__.search(
+        query: {
+          bool: {
+            must: [
+              { match: { chat_id: chat_id } },
+              { match: { message_body: message_body } }
+            ]
+          }
+        }
+      ).records
     end
+  
 end
