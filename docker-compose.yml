@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  mysql:
+  db:
     image: mysql:5.7
     restart: always
     environment:
@@ -61,7 +61,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_URL: redis://redis:6379/1
-      DB_HOST: mysql
+      DB_HOST: db
       DB_PORT: "3306" 
       DB_USERNAME: user
       DB_PASSWORD: password
@@ -80,12 +80,12 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - mysql
+      - db
       - redis
       - rabbitmq
       - elasticsearch
     environment:
-      DB_HOST: mysql
+      DB_HOST: db
       MYSQL_ROOT_PASSWORD: password
       DB_NAME: chat_system
       DB_USERNAME: user
