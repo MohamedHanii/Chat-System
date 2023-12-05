@@ -20,13 +20,13 @@ After installing docker you can write thses commands to run the application
 Clone Repository
 
 ```
-git clone https://github.com/MohamedHanii/Chatting-Application.git
+git clone https://github.com/MohamedHanii/Chat-System.git
 ```
 
 Running Application
 
 ```
-cd Chatting-Application
+cd chat_system
 
 sudo docker-compose up --build
 ```
@@ -50,9 +50,9 @@ The application have 3 tables: Applications, Chats, Messages with 1-M Relationsh
 | Field          | Type          | Null | Key   | Default | Extra          |
 |:---------------|:--------------|:-----|:------|:--------|:---------------|
 | id             | int(11)       | NO   | PRI   | NULL    | auto_increment |
-| chatName       | varchar(255)  | YES  |       | NULL    |                |
-| chatNumber     | decimal(10,0) | YES  |       | NULL    |                |
-| messageCount   | decimal(10,0) | YES  |       | 0       |                |
+| chat_name      | varchar(255)  | YES  |       | NULL    |                |
+| chat_number    | decimal(10,0) | YES  |       | NULL    |                |
+| message_count  | decimal(10,0) | YES  |       | 0       |                |
 | application_id | int(11)       | YES  |       | NULL    |                |
 | created_at     | datetime      | NO   |       | NULL    |                |
 | updated_at     | datetime      | NO   |       | NULL    |                |
@@ -63,8 +63,8 @@ The application have 3 tables: Applications, Chats, Messages with 1-M Relationsh
 | Field          | Type             | Null  | Key | Default | Extra          |
 |:---------------|:-----------------|:------|:----|:--------|:---------------|
 | id             | int(11)          | NO    | PRI | NULL    | auto_increment |
-| messageContent | varchar(255)     | YES   |     | NULL    |                |
-| messageNumber  | decimal(10,0)    | YES   |     | NULL    |                |
+| message_body   | varchar(255)     | YES   |     | NULL    |                |
+| message_number | decimal(10,0)    | YES   |     | NULL    |                |
 | chat_id        | int(11)          | YES   |     | NULL    |                |
 | created_at     | datetime         | NO    |     | NULL    |                |
 | updated_at     | datetime         | NO    |     | NULL    |                |
@@ -74,9 +74,9 @@ The application have 3 tables: Applications, Chats, Messages with 1-M Relationsh
 ## Immplmentation
 
 As first, i started with created dockerfile and docker-compose file which have the following containers:
-* db        --> MYSQL
+* mysql     --> MYSQL
 * sidekiq   --> Queue System
-* es        --> Elastic Search
+* elasticsearch --> Elastic Search
 * redis     --> In Memory database (Redis)
 * app       --> Ruby on Rails
 
@@ -90,13 +90,13 @@ Using Elastic Search to be able to search among messages with a given keyword (P
 
 ## API Endpoints
 
-API is running and listening on port 3001
+API is running and listening on port 3000 you can find post man collections in files or you can use curl
 
 ### Application Endpoints
 **Get all Application**   [GET /api/v1/applications]
 
 ```
-curl -X GET  http://localhost:3001/api/v1/applications
+curl -X GET  http://localhost:3000/api/v1/applications
 ```
 
 response:
@@ -106,14 +106,14 @@ response:
     {
         "token": "2b579d089f",
         "name": "test application",
-        "chatCount": 1,
+        "chat_count": 1,
         "created_at": "2022-05-30T13:27:03.000Z",
         "updated_at": "2022-05-30T13:59:04.000Z"
     },
     {
         "token": "bf572e5acd26bc9c",
         "name": "test application#2",
-        "chatCount": 0,
+        "chat_count": 0,
         "created_at": "2022-05-31T13:36:36.000Z",
         "updated_at": "2022-05-31T13:36:36.000Z"
     }
@@ -123,7 +123,7 @@ response:
 **Get Specific application using application token** [GET /api/v1/applications/:token]
 
 ```
- curl -X GET  http://localhost:3001/api/v1/applications/bf572e5acd26bc9c
+ curl -X GET  http://localhost:3000/api/v1/applications/bf572e5acd26bc9c
 ```
 
 response: 
@@ -132,7 +132,7 @@ response:
 {
     "token": "bf572e5acd26bc9c",
     "name": "test application#2",
-    "chatCount": 0,
+    "chat_count": 0,
     "created_at": "2022-05-31T13:36:36.000Z",
     "updated_at": "2022-05-31T13:36:36.000Z"
 }
@@ -141,7 +141,7 @@ response:
 **Create new application**  [POST /api/v1/applications]
 
 ```
-curl -X POST  http://localhost:3001/api/v1/applications?name=test-application
+curl -X POST  http://localhost:3000/api/v1/applications?name=test-application
 ```
 
 response:
@@ -150,7 +150,7 @@ response:
 {
   "token":"d42ad2ff1955ebe6",
   "name":"test-application",
-  "chatCount":0,
+  "chat_count":0,
   "created_at":"2022-06-02T08:57:21.000Z",
   "updated_at":"2022-06-02T08:57:21.000Z"
  }
@@ -159,7 +159,7 @@ response:
 **Update Application using token** [PUT /api/v1/applications/:token]
 
 ```
-curl -X PUT  http://localhost:3001/api/v1/applications/d42ad2ff1955ebe6?name=updated-application
+curl -X PUT  http://localhost:3000/api/v1/applications/d42ad2ff1955ebe6?name=updated-application
 ```
 
 response:
@@ -168,7 +168,7 @@ response:
 {
   "name": "updated-application",
   "token": "d42ad2ff1955ebe6",
-  "chatCount": 0,
+  "chat_count": 0,
   "created_at": "2022-06-02T08:57:21.000Z",
   "updated_at": "2022-06-02T09:00:14.000Z"
 }
@@ -177,7 +177,7 @@ response:
 **Delete Application using token** [DELETE /api/v1/applications/:token]
 
 ```
-curl -X DELETE  http://localhost:3001/api/v1/applications/d42ad2ff1955ebe6
+curl -X DELETE  http://localhost:3000/api/v1/applications/d42ad2ff1955ebe6
 ```
 
 response:
@@ -186,7 +186,7 @@ response:
 {
   "token": "d42ad2ff1955ebe6",
   "name": "updated-application",
-  "chatCount": 0,
+  "chat_count": 0,
   "created_at": "2022-06-02T08:57:21.000Z",
   "updated_at": "2022-06-02T09:00:14.000Z"
 }
@@ -196,7 +196,7 @@ response:
 **Get all Chats for application using application Token**   [GET /api/v1/applications/:token/chats]
 
 ```
-curl -X GET  http://localhost:3001/api/v1/applications/bf572e5acd26bc9c/chats
+curl -X GET  http://localhost:3000/api/v1/applications/bf572e5acd26bc9c/chats
 ```
 
 response:
@@ -223,7 +223,7 @@ response:
 **Get Specific Chat using application token and Chat Number** [GET /api/v1/applications/:token/chats/:chatNumber]
 
 ```
- curl -X GET  http://localhost:3001/api/v1/applications/bf572e5acd26bc9c/chats/1
+ curl -X GET  http://localhost:3000/api/v1/applications/bf572e5acd26bc9c/chats/1
 ```
 
 response: 
@@ -241,7 +241,7 @@ response:
 **Create new Chat**  [POST /api/v1/applications/:token/chats]
 
 ```
-curl -X POST  http://localhost:3001/api/v1/applications/bf572e5acd26bc9c/chats?name=test-application
+curl -X POST  http://localhost:3000/api/v1/applications/bf572e5acd26bc9c/chats?name=test-application
 ```
 
 response:
@@ -259,7 +259,7 @@ response:
 **Update Chat using application token with chat number** [PUT /api/v1/applications/:token/chats/:chatNumber]
 
 ```
-curl -X PUT  http://localhost:3001/api/v1/applications/bf572e5acd26bc9c/chats/1?name=updated-chat
+curl -X PUT  http://localhost:3000/api/v1/applications/bf572e5acd26bc9c/chats/1?name=updated-chat
 ```
 
 response:
@@ -280,7 +280,7 @@ response:
 [GET /api/v1/applications/:token/chats/:chatNumber/messages]
 
 ```
-curl -X GET  http://localhost:3001/api/v1/applications/567493619db03f60/chats/3/messages
+curl -X GET  http://localhost:3000/api/v1/applications/567493619db03f60/chats/3/messages
 ```
 
 response:
@@ -313,7 +313,7 @@ response:
 [GET /api/v1/applications/:token/chats/:chatNumber/messages/:messageNumber]
 
 ```
- curl -X GET  http://localhost:3001/api/v1/applications/567493619db03f60/chats/3/messages/1
+ curl -X GET  http://localhost:3000/api/v1/applications/567493619db03f60/chats/3/messages/1
 ```
 
 response: 
@@ -332,7 +332,7 @@ response:
 [POST /api/v1/applications/:token/chats/:chatNumber/messages]
 
 ```
-curl -X POST  http://localhost:3001/api/v1/applications/bf572e5acd26bc9c/chats/3/messages?message=test-message
+curl -X POST  http://localhost:3000/api/v1/applications/bf572e5acd26bc9c/chats/3/messages?message=test-message
 ```
 
 response:
@@ -351,7 +351,7 @@ response:
 [PUT /api/v1/applications/:token/chats/:chatNumber/messages/:messageNumber]
 
 ```
-curl -X PUT  http://localhost:3001/api/v1/applications/bf572e5acd26bc9c/chats/3/messages/1?message=updated-chat
+curl -X PUT  http://localhost:3000/api/v1/applications/bf572e5acd26bc9c/chats/3/messages/1?message=updated-chat
 ```
 
 response:
